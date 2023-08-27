@@ -1,29 +1,25 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Scanner Example</title>
-  <script src="instascan.min.js"></script>
-</head>
-<body>
-  <video id="scanner-container"></video>
-  <button id="start-scan">Start Scan</button>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-  const scannerContainer = document.getElementById('scanner-container');
-  const startScanButton = document.getElementById('start-scan');
-
-  const scanner = new Instascan.Scanner({ video: scannerContainer });
-
-  startScanButton.addEventListener('click', () => {
-    scanner.start();
-    scanner.scan((content, image) => {
-      alert('Scanned: ' + content);
-      scanner.stop();
-    });
-  });
-});
-
-  </script>
-  
-</body>
+  <head>
+    <title>Instascan</title>
+    <script type="text/javascript" src="instascan.min.js"></script>
+  </head>
+  <body>
+    <video id="preview"></video>
+    <script type="text/javascript">
+      let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+      scanner.addListener('scan', function (content) {
+        console.log(content);
+      });
+      Instascan.Camera.getCameras().then(function (cameras) {
+        if (cameras.length > 0) {
+          scanner.start(cameras[0]);
+        } else {
+          console.error('No cameras found.');
+        }
+      }).catch(function (e) {
+        console.error(e);
+      });
+    </script>
+  </body>
 </html>
